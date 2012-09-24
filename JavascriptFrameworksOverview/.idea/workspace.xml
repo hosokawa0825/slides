@@ -23,7 +23,7 @@
       <file leaf-file-name="index.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="87" column="8" selection-start="3187" selection-end="3187" vertical-scroll-proportion="0.25611326">
+            <state line="29" column="4" selection-start="1402" selection-end="1402" vertical-scroll-proportion="0.55984557">
               <folding />
             </state>
           </provider>
@@ -116,6 +116,13 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
   </component>
   <component name="RunManager">
+    <configuration default="true" type="JavascriptDebugSession" factoryName="Local">
+      <JSDebuggerConfigurationSettings>
+        <option name="engineId" />
+        <option name="fileUrl" />
+      </JSDebuggerConfigurationSettings>
+      <method />
+    </configuration>
     <list size="0" />
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
@@ -203,7 +210,7 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="87" column="8" selection-start="3187" selection-end="3187" vertical-scroll-proportion="0.25611326">
+        <state line="29" column="4" selection-start="1402" selection-end="1402" vertical-scroll-proportion="0.55984557">
           <folding />
         </state>
       </provider>
