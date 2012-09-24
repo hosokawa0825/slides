@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	<title>Getting Started with deck.js</title>
+	
+	<meta name="description" content="A jQuery library for modern HTML presentations">
+	<meta name="author" content="Caleb Troughton">
+	<meta name="viewport" content="width=1024, user-scalable=no">
+	
+	<!-- Core and extension CSS files -->
+	<link rel="stylesheet" href="../core/deck.core.css">
+	<link rel="stylesheet" href="../extensions/goto/deck.goto.css">
+	<link rel="stylesheet" href="../extensions/menu/deck.menu.css">
+	<link rel="stylesheet" href="../extensions/navigation/deck.navigation.css">
+	<link rel="stylesheet" href="../extensions/status/deck.status.css">
+	<link rel="stylesheet" href="../extensions/hash/deck.hash.css">
+	<link rel="stylesheet" href="../extensions/scale/deck.scale.css">
+	
+	<!-- Style theme. More available in /themes/style/ or create your own. -->
+	<link rel="stylesheet" href="../themes/style/web-2.0.css">
+	
+	<!-- Transition theme. More available in /themes/transition/ or create your own. -->
+	<link rel="stylesheet" href="../themes/transition/horizontal-slide.css">
+	
+	<script src="../modernizr.custom.js"></script>
+</head>
+
+<body class="deck-container">
+
+<!-- Begin slides -->
+<section class="slide" id="title-slide">
+	<h2>MVCフレームワークの選択基準と主要フレームワークの特徴</h2>
+    <h2>Toru Hosokawa</h2>
+    <h3>twitter:@anton0825</h3>
+    <h3>facebook:toru.hosokawa1</h3>
+    <h3>github:hosokawa0825</h3>
+    <h3>blog:http://d.hatena.ne.jp/anton0825/</h3>
+    <h3>2012.10.1</h3>
+</section>
+
+<section class="slide" id="problem">
+	<h2>JavaScriptのMVCフレームワークが増えている</h2>
+    <h3>Backbone.js, Angular.js, Spine, etc…</h3>
+    <h3>FWを選ぶのが大変！</h3>
+</section>
+
+<section class="slide" id="solution-1">
+    <h2>FWの調査手順−１</h2>
+    <ul>
+        <li>
+            <h3>作るアプリの要件を洗い出す</h3>
+            <p class="slide">規模</p>
+            <p class="slide">複雑度</p>
+            <p class="slide">特殊なUI</p>
+        </li>
+        <li>
+            <h3 class="slide">各FWの特徴を一覧にまとめる</h3>
+            <p class="slide">FWの特徴一覧を後でお見せします</p>
+            <p class="slide">情報元：<a href="http://coding.smashingmagazine.com/2012/07/27/journey-through-the-javascript-mvc-jungle/">Journey Through The JavaScript MVC Jungle</a></p>
+        </li>
+    </ul>
+</section>
+
+<section class="slide" id="solution-2">
+    <h2>FWの調査手順−２</h2>
+    <ul>
+        <li>
+            <h3>FW間の比較、アプリの要件とFWの機能の比較（Fit Gap分析）を行い、候補を数個まで絞る</h3>
+            <p>以下の項目を確認する。</p>
+            <p>・コミュニティは大きいか？</p>
+            <p>・FWで何が出来るか？FWを拡張しなければ要件を満たせないか？</p>
+            <p>・FWを使ったプロダクトがあるか？</p>
+            <p>・FWは柔軟か、またはある目的に特化されているか？</p>
+            <p>・十分なドキュメントがあるか？</p>
+            <p>・ファイルサイズが大きすぎないか？</p>
+        </li>
+    </ul>
+</section>
+
+<section class="slide" id="solution-3">
+    <h2>FWの調査手順−３</h2>
+    <ul>
+        <li>
+            <h3>TodoMVCでコードを見比べて、写経してみる。ここで候補を２，３個まで絞る</h3>
+            <p><a href="http://addyosmani.github.com/todomvc/">TodoMVC</a></p>
+            <img src="TodoMVC-004714.png">
+        </li>
+    </ul>
+</section>
+
+<section class="slide" id="solution-4">
+    <h2>FWの調査手順−４</h2>
+    <ul>
+        <li>
+            <h3>デモアプリを各FWを使って書いてみる</h3>
+            <p>使ってみて「しっくりくる」ことが大事</p>
+            <p>書いてみないとわからないことは沢山ある</p>
+        </li>
+    </ul>
+</section>
+
+<section class="slide" id="backbonejs-features-1">
+	<h2>各FWのメリット・デメリット</h2>
+    <h2>Backbone.js</h2>
+    <h3>メリット</h3>
+    <ul>
+        <li><strong>コミュニティが大きい。StackOverflowにノウハウが蓄積されている。FWの問題点はコミュニティによってすぐ解決される。継続的に開発されている。</strong></li>
+        <li>実績は最も豊富（SoundCloud、LinkedIn、DocumentCloudで使われている）</li>
+        <li>ドキュメント豊富。</li>
+        <li>シンプル、軽量。コアコンポーネントはコレクション、モデル、ビュー、ルーターの４つだけ。</li>
+        <li>シンプルなのでアーキテクチャを変更しやすい。</li>
+        <li>RESTfulAPIを使ってサーバ上のデータを操作できる。</li>
+        <li>モデル、ビュー、イベント、テンプレート、ルーティング機能がある。</li>
+        <li>モデルとビューをバインド出来る。</li>
+        <li>MVVMパターン</li>
+        <li>Marionette、VertebraeなどのBackbone.jsをベースとしたFWが作られている。</li>
+        <li>おまじないを沢山書く必要があるが、そのかわり黒魔術は少なめ。好きなようにアーキテクチャを組める。</li>
+        <li>Underscore,jQuery,Zeptoと統合されている。</li>
+        <li>シンプルで、チュートリアルが豊富なため勉強しやすい。とりあえずMVCフレームワークを勉強してみたいならコレ。</li>
+    </ul>
+</section>
+
+<section class="slide" id="backbonejs-features-2">
+    <h2>Backbone.js</h2>
+    <h3>デメリット</h3>
+    <ul>
+        <li>extendメソッドがいまいち。これは親オブジェクトのプロパティを子オブジェクトにコピーする。プロトタイプ継承を使わない。</li>
+        <li>変化が激しいため、一ヶ月前の記事やチュートリアルに書かれている内容がもう使えなかったりする。</li>
+        <li>ビューとモデルのバインディングを手動で管理する必要がある。モデルの一部が変更されたらビュー全体が更新されてしまう。</li>
+        <li>RESTfulAPIを使って複数件のデータを一括登録・更新することができない。（これはRESTの問題ではあるが）</li>
+    </ul>
+</section>
+
+<section class="slide" id="emberjs-features-1">
+    <h2>Ember.js</h2>
+    <h3>メリット</h3>
+    <ul>
+        <li>実績豊富（Square Inc.など）</li>
+        <li>ドキュメント豊富。</li>
+        <li>テンプレートエンジンのHandlebarsと統合されている。</li>
+        <li>ネイティブアプリぐらいリッチなWebアプリが作れる。</li>
+        <li>目的特化型</li>
+        <li>CoCによりモデルとビューのバインドが楽に出来る。コードが少なくて済む。</li>
+        <li>MVCパターン</li>
+        <li>RESTfulAPIを使ってサーバ上のデータを操作できる。</li>
+        <li>開発者のYehuda Katz(Rails Core Teamの人)は実績があるので信頼できる。</li>
+    </ul>
+    <h3>デメリット</h3>
+    <ul>
+        <li>バージョンが1.0未満なので今後仕様が変わる可能性がある。特にrouterとEmber data</li>
+        <li>Backbone.jsなどに比べてドキュメントが不足している。FWのコードを調べて使い方を把握する必要がある。</li>
+        <li>チュートリアルなどの学習リソースも少ない。入門者はつらい。</li>
+        <li>黒魔術使いまくりなのでちょっと怖い。分析が難しい不具合が起こるかも。。</li>
+        <li>エラーメッセージがわかりにくい。</li>
+        <li>コミュニティが小さい。</li>
+        <li>永続化機能が弱い。localStorageを使ったり、RESTfulAPI経由でデータをサーバと同期したりする機能が無い。</li>
+    </ul>
+</section>
+
+<section class="slide" id="JavaScriptMVC-features-1">
+    <h2>JavaScriptMVC</h2>
+    <h3>メリット</h3>
+    <ul>
+        <li>実績豊富（IBMで使われている）</li>
+        <li>開発に必要なツールが一通り入ってる。</li>
+    </ul>
+    <h3>デメリット</h3>
+    <ul>
+        <li>FWの開発スピードが遅い</li>
+    </ul>
+</section>
+
+<section class="slide" id="CanJS-features-1">
+    <h2>CanJS</h2>
+    <h3>メリット</h3>
+    <ul>
+        <li>軽量</li>
+        <li>自動更新テンプレート</li>
+        <li>jQuery,Dojoのようなメジャーなライブラリと統合されている</li>
+        <li>パフォーマンスがいい</li>
+        <li>モデル、ビュー、コントローラ、ルーティング機能がある。</li>
+        <li>大きなアプリが作られた実績はないが、今後作られる可能性はある</li>
+        <li>開発チームが経験豊富</li>
+    </ul>
+</section>
+
+<section class="slide" id="AngularJS-features-1">
+    <h2>AngularJS</h2>
+    <h3>メリット</h3>
+    <ul>
+        <li>宣言したらViewの振る舞いも定義される。これはカスタムHTMLタグとViewクラスで実現されている。</li>
+        <li>簡単にテストできる。</li>
+        <li>モデル、ビュー、コントローラ、ルーティング、テンプレート機能がある。</li>
+        <li>Web Componentsのような先進的なWebプラットフォームの機能を取り入れている</li>
+        <li>アプリケーションテンプレート生成ツールがある(angular-seed)</li>
+        <li>双方向データバインディングが強力。イベントを気にせずモデルのデータを正しくすることに集中できる。</li>
+        <li>FWのファイルサイズが小さい。テンプレートエンジンは文字列をDOMに変換するのではなく、DOMを直接テンプレートとして使用するのでパフォーマンスがいい。　TODO　要確認</li>
+        <li>モダンブラウザのみサポートする場合はjQueryがなくても動く。</li>
+        <li>わかりやすい、使いやすい。</li>
+        <li>ドキュメントが豊富。</li>
+        <li>スコープがDOMと一致している。　TODO　要確認</li>
+        <li>Chrome拡張のBatarangがChrome Developer’s Toolsに統合されていてデバッグ時にデータを確認しやすい。　TODO　要確認</li>
+        <li>定型的なコードがかなり減る。</li>
+        <li>クラスの再利用がしやすい。　TODO　要確認</li>
+        <li>カスタムタグによって複雑な機能が簡単に実現できる。</li>
+        <li>DIによって簡単にテストできる。　TODO　要確認</li>
+        <li>Backbone.jsに比べて使えるようになるまでが早い。</li>
+    </ul>
+    <h3>デメリット</h3>
+    <ul>
+        <li>UIの状態を明示的に（自分が書いたコードによって）変更できない。特に、ng-show属性のエレメントをfede inとかのアニメーションを使って表示させることが出来ない　TODO　要確認</li>
+    </ul>
+</section>
+
+<section class="slide" id="Dojo-features-1">
+    <h2>Dojo</h2>
+    <h3>メリット</h3>
+    <ul>
+        <li>様々なwidgetを作れる（画像、グラフ、グリッド）</li>
+        <li>JSファイルの遅延ロード機能がある。</li>
+        <li>CDNとの統合。</li>
+        <li>国際化機能が強い。</li>
+        <li>クラスシステムサポート。</li>
+        <li>このFWを土台として新しいFWを作れる。</li>
+        <li>シンタックスがシンプル。</li>
+        <li>他のJSファイルを読み込む起点になるローダーファイルの大きさが6KB程度と小さい。</li>
+        <li>ビルド機能がある。</li>
+        <li>AMDにより依存関係を解決する機能がある。</li>
+        <li>DOMの操作からSVG,VML,canvasまで幅広く多くの機能がある。</li>
+        <li>ウィジェットシステムのDijitは使いやすさと拡張性が素晴らしい。</li>
+        <li>UIコンポーネントがいい。タブ、グリッド、フォームなど。クロスブラウザ対応されている。</li>
+        <li>モック（mocks.Integrates）を使って簡単にテストできる。</li>
+    </ul>
+    <h3>デメリット</h3>
+    <ul>
+        <li>dojo/_base/declareの機能はstrictモードに100%準拠しているわけではない。後方互換性のためにパフォーマンスが多少犠牲になっている。これらの問題のほとんどはDojo2.0では解決される予定ではある。</li>
+        <li>UIコンポーネントのデフォルトのデザインが時代遅れ。</li>
+        <li>HTML5対応でない部分がある。</li>
+        <li>ドキュメントの量はまずまず。</li>
+        <li>テンプレートエンジンは弱い。自動でデータをバインドしてくれない　TODO　要確認</li>
+    </ul>
+</section>
+
+<section class="slide" id="YUI-features-1">
+    <h2>YUI</h2>
+    <h3>メリット</h3>
+    <ul>
+        <li>YUI3は機能がモジュール化されており、必要な機能だけ取り出して他のライブラリと一緒に使える。</li>
+        <li>疎結合化の機能がBackbone.jsより優れている。例えば、イベント関係の機能はイベントモジュールをmixinすることでどのオブジェクトにも追加できるようになっている。</li>
+        <li>Ember.jsと連携する機能がある。</li>
+        <li>YUIエクステンションが使える。</li>
+        <li>モデル、ビュー、ルーティング機能がある。</li>
+        <li>異なるURLを持つ複数のViewを持つアプリを簡単に作れる。　TODO　要確認</li>
+        <li>ビュートランザクションのサポート　TODO　要確認</li>
+        <li>widget、ビューコンポーネント、アーキテクチャ作成をサポートする仕組みを含む全部入りFW</li>
+    </ul>
+    <h3>デメリット</h3>
+    <ul>
+        <li>テンプレート作成ツール（yuiproject）はあるが、あまりおすすめできない</li>
+        <li>ファイルサイズは大きい</li>
+        <li>AMD機能がない。モジュールローダーを使って必要なJSファイルだけダウンロードして使うといったことができない</li>
+    </ul>
+</section>
+
+<section class="slide" id="Spine-features-1">
+    <h2>Spine</h2>
+    <h3>メリット</h3>
+    <ul>
+        <li>シンプルで依存するライブラリがない</li>
+        <li>非同期API</li>
+        <li>目的特化型だが、柔軟性もある。</li>
+        <li>シンプルなモデル、ビュー、コントローラ、イベント、ルーティング</li>
+        <li>CoffeeScriptと統合されている</li>
+        <li>ドキュメントが豊富</li>
+    </ul>
+</section>
+
+<section class="slide" id="KnockoutJS-features-1">
+    <h2>KnockoutJS</h2>
+    <h3>メリット</h3>
+    <ul>
+        <li>複雑で、動的なUIを作れる</li>
+        <li>モデルとビューの双方向バインディングによってビューが自動的に更新される</li>
+        <li>モデルデータのdependency trackingがサポートされている（？？？）</li>
+        <li>好きなFWと一緒に使える</li>
+        <li>既存のアプリに組み込むことも簡単</li>
+        <li>テンプレートエンジンを持つ</li>
+        <li>拡張しやすい</li>
+        <li>Collection Viewを使うとViewのソートが簡単にできる。</li>
+        <li>カスタムイベントが利用できる</li>
+        <li>データバインディングが使いやすい</li>
+        <li>テンプレートの代わりにコントロールフローバインディングを使っているところがいい　TODO　要確認</li>
+    </ul>
+    <h3>デメリット</h3>
+    <ul>
+        <li>アプリの規模が大きい場合、APIが使いづらくなりそう。　TODO　要確認</li>
+        <li>アプリを構造化するのが難しい。ビューモデルはあるが、正しく構造化されたアプリを作るのが難しい。</li>
+    </ul>
+</section>
+
+<section class="slide" id="jQuery-features-1">
+    <h2>jQuery</h2>
+    <h3>メリット</h3>
+    <ul>
+        <li>クロスブラウザ対応</li>
+        <li>イベントが使える</li>
+        <li>外部サービスと連携するのに使える</li>
+        <li>拡張可能</li>
+        <li>プラグインが豊富</li>
+    </ul>
+    <h3>デメリット</h3>
+    <ul>
+        <li>MVCパターンによるコードの構造化はできない</li>
+        <li>複雑なWebアプリを作るのには適さない</li>
+    </ul>
+</section>
+
+<section class="slide" id="Maria-features-1">
+    <h2>Maria</h2>
+    <h3>メリット</h3>
+    <ul>
+        <li>ピュアMVCフレームワーク。シンプル。</li>
+    </ul>
+    <h3>デメリット</h3>
+    <ul>
+        <li>テストコード、ドキュメントが少ない</li>
+        <li>チュートリアルが少ない</li>
+    </ul>
+</section>
+
+<section class="slide" id="Cujo-features-1">
+    <h2>Cujo</h2>
+    <h3>メリット</h3>
+    <ul>
+        <li>自分好みのMVCフレームワークが作れる。アプリの要件にフィットしたフレームワークを作るためのローレベルなツールが用意されている。</li>
+        <li>プラグインを作るための機能が豊富。プラグインは他のMVCフレームワークを統合したり、拡張したりするのに使える。</li>
+    </ul>
+    <h3>デメリット</h3>
+    <ul>
+        <li>コミュニティが小さい。大規模なアプリを作るノウハウが足りない</li>
+        <li>ドキュメント、チュートリアル、サンプルが少ない。が、ドキュメントはもうすぐ増えそう。</li>
+    </ul>
+</section>
+
+<section class="slide" id="Extjs-features-1">
+    <h2>Extjs</h2>
+    <h3>メリット</h3>
+    <ul>
+        <li>Sencha Architectというツールによって、UIをGUI環境で作れる。</li>
+        <li>モバイル用FWのSencha Touchがあり、Extjsと似ているためモバイル用アプリを作りやすい。</li>
+        <li>複雑なUIを比較的簡単に作れる。</li>
+        <li>業務システムを作るにはベストなフレームワークと思われる。</li>
+        <li>使えるようになるまでは比較的早い。</li>
+        <li>MVCパターンを使うよう半ば強制されるのでアプリの構造がきれいになりやすい。パッケージ構造とフォルダ・ファイル構成が一致する。</li>
+        <li>UIコンポーネントが非常に豊富。生のHTMLを書くことはほとんどない。</li>
+    </ul>
+    <h3>デメリット</h3>
+    <ul>
+        <li>HTMLを基本的にすべてフレームワークが生成するため、どんなHTMLが生成されるかが把握しづらい。SEOのためにHTMLを最適化するといったことがしづらい。CSSフレームワークが使いづらい。</li>
+        <li>ライセンスの条件は厳しく、わかりづらい。</li>
+        <li>パフォーマンスが悪い。</li>
+        <li>ほぼすべてのHTMLをJavaScriptで生成するため、そのままではクローラブルでない（Googleなどの検索エンジンから検索できない）</li>
+    </ul>
+</section>
+
+<section class="slide" id="Batman-features-1">
+    <h2>Batman</h2>
+    <h3>メリット</h3>
+    <ul>
+        <li>Viewのバインディングが非常に簡単</li>
+        <li>Railsと相性がいい</li>
+        <li>CoCを使っていてコードが少なくて済む</li>
+    </ul>
+    <h3>デメリット</h3>
+    <ul>
+        <li>ドキュメントが少ない</li>
+        <li>今後開発が順調に進むかが疑問</li>
+    </ul>
+</section>
+
+<section class="slide" id="conclusion">
+    <h1>まとめ</h1>
+    <h2>・色んなFWについて勉強しよう</h2>
+    <h3>沢山のFWについて勉強するのは大変だが、それによって色んなテクニックを知ることが出来る。</h3>
+    <h3>沢山のFWに詳しくなると、作るアプリの要件により近いFWを選べるようになる。それによってより実装が楽になる。</h3>
+    <h2>・FWをカスタマイズしよう</h2>
+    <h3>フレームワークを使っているとそれにしばられがちで、無理矢理フレームワークの部品を使って課題を解決しようとしてしまう。フレームワークを拡張してもっと適切な実装ができないかを考えるべき。</h3>
+    <h2>・FWの選定に時間をかけよう</h2>
+    <h3>安定で、メンテナンス性の高いアプリを作るために、時間をかけてFWを選ぶことが大事。</h3>
+</section>
+
+<!-- deck.navigation snippet -->
+<a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
+<a href="#" class="deck-next-link" title="Next">&#8594;</a>
+
+<!-- deck.status snippet -->
+<p class="deck-status">
+	<span class="deck-status-current"></span>
+	/
+	<span class="deck-status-total"></span>
+</p>
+
+<!-- deck.goto snippet -->
+<form action="." method="get" class="goto-form">
+	<label for="goto-slide">Go to slide:</label>
+	<input type="text" name="slidenum" id="goto-slide" list="goto-datalist">
+	<datalist id="goto-datalist"></datalist>
+	<input type="submit" value="Go">
+</form>
+
+<!-- deck.hash snippet -->
+<a href="." title="Permalink to this slide" class="deck-permalink">#</a>
+
+
+<!-- Grab CDN jQuery, with a protocol relative URL; fall back to local if offline -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="../jquery-1.7.2.min.js"><\/script>')</script>
+
+<!-- Deck Core and extensions -->
+<script src="../core/deck.core.js"></script>
+<script src="../extensions/hash/deck.hash.js"></script>
+<script src="../extensions/menu/deck.menu.js"></script>
+<script src="../extensions/goto/deck.goto.js"></script>
+<script src="../extensions/status/deck.status.js"></script>
+<script src="../extensions/navigation/deck.navigation.js"></script>
+<script src="../extensions/scale/deck.scale.js"></script>
+
+<!-- Initialize the deck -->
+<script>
+$(function() {
+	$.deck('.slide');
+});
+</script>
+
+</body>
+</html>
