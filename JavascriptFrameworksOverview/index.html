@@ -78,7 +78,7 @@
             <p class="slide">・ファイルサイズが大きすぎないか？</p>
             <p class="slide">・FWを使ったプロダクトがあるか？</p>
             <p class="slide">・FWで何が出来るか？FWを拡張しなければ要件を満たせないか？</p>
-            <p class="slide">・FWは柔軟か、またはある目的に特化されているか？</p>
+            <p class="slide">・FWは柔軟か、または特徴的な機能があるか？</p>
         </li>
     </ul>
 </section>
@@ -141,12 +141,13 @@
     <h2>Ember.js</h2>
     <h3>メリット</h3>
     <ul>
-        <li><strong>CoCによりモデルの属性間のバインドやモデルとビューのバインドが楽に出来る。コードが少なくて済む。</strong></li>
+        <li><strong><a href="https://github.com/studiomohawk/emberjs-doc-translation/blob/master/ember.js-docs-translation.md#%E7%AE%97%E5%87%BA%E6%B8%88%E3%81%BF%E3%83%97%E3%83%AD%E3%83%91%E3%83%86%E3%82%A3-computed-properties">導出項目と導出元の項目の依存関係を設定できる</a></strong> </li>
+        <li><strong><a href="https://github.com/studiomohawk/emberjs-doc-translation/blob/master/ember.js-docs-translation.md#emberjs%E3%82%92%E7%B0%A1%E5%8D%98%E3%81%AB%E7%B4%B9%E4%BB%8B">双方向バインディング</a></strong></li>
+        <li>CoCによりモデルの属性間のバインドやモデルとビューのバインドが楽に出来る。コードが少なくて済む。</li>
         <li>実績豊富（Square Inc.など）</li>
         <li>ドキュメント豊富。</li>
         <li>テンプレートエンジンのHandlebarsと統合されている。</li>
         <li>ネイティブアプリぐらいリッチなWebアプリが作れる。</li>
-        <li>目的特化型</li>
         <li>MVCパターン</li>
         <li>RESTfulAPIを使ってサーバ上のデータを操作できる。</li>
         <li>開発者のYehuda Katz(Rails Core Teamの人)は実績があるので信頼できる。</li>
@@ -167,7 +168,7 @@
     <h2><a href="http://extjs.co.jp/">Extjs</a></h2>
     <h3>メリット</h3>
     <ul>
-        <li><strong>UIコンポーネントが非常に豊富。生のHTMLを書くことはほとんどない。<a href="http://dev.sencha.com/deploy/ext-4.0.0/examples/feed-viewer/feed-viewer.html">デモ</a></strong></li>
+        <li><strong><a href="http://dev.sencha.com/deploy/ext-4.0.0/examples/feed-viewer/feed-viewer.html">UIコンポーネントが非常に豊富。生のHTMLを書くことはほとんどない。</a></strong></li>
         <li>複雑なUIを比較的簡単に作れる。</li>
         <li>業務システムを作るにはベストなフレームワークと思われる。</li>
         <li>Sencha Architectというツールによって、UIをGUI環境で作れる。</li>
@@ -180,6 +181,7 @@
         <li>HTMLを基本的にすべてフレームワークが生成するため、どんなHTMLが生成されるかが把握しづらい。SEOのためにHTMLを最適化するといったことがしづらい。CSSフレームワークが使いづらい。</li>
         <li>ライセンスの条件は厳しく、わかりづらい。</li>
         <li>パフォーマンスが悪い。</li>
+        <li>ファイルサイズが大きい。minify,gzip済みで380KB程度</li>
         <li>ほぼすべてのHTMLをJavaScriptで生成するため、そのままではクローラブルでない（Googleなどの検索エンジンから検索できない）</li>
     </ul>
 </section>
@@ -188,10 +190,10 @@
     <h2>KnockoutJS</h2>
     <h3>メリット</h3>
     <ul>
-        <li><strong>モデルとビューの双方向バインディング</strong></li>
         <li><strong><a href="http://learn.knockoutjs.com/">公式チュートリアルがよくできている</a></strong></li>
+        <li><strong>双方向バインディング</strong></li>
+        <li><strong>dependency trackingによって自動的に導出元の項目が変更されたら導出項目も変更される</strong></li>
         <li>複雑で、動的なUIを作れる</li>
-        <li>モデルデータのdependency tracking</li>
         <li>好きなFWと一緒に使える</li>
         <li>既存のアプリに組み込むことも簡単</li>
         <li>テンプレートエンジンを持つ</li>
@@ -199,11 +201,10 @@
         <li>Collection Viewを使うとViewのソートが簡単にできる。</li>
         <li>カスタムイベントが利用できる</li>
         <li>データバインディングが使いやすい</li>
-        <li>テンプレートの代わりにコントロールフローバインディングを使っているところがいい　TODO　要確認</li>
     </ul>
     <h3>デメリット</h3>
     <ul>
-        <li>アプリの規模が大きい場合、APIが使いづらくなりそう。　TODO　要確認</li>
+        <li>アプリの規模が大きい場合、APIが使いづらくなりそう。</li>
         <li>アプリを構造化するのが難しい。ビューモデルはあるが、正しく構造化されたアプリを作るのが難しい。</li>
     </ul>
 </section>
@@ -212,27 +213,27 @@
     <h2>AngularJS</h2>
     <h3>メリット</h3>
     <ul>
-        <li>宣言したらViewの振る舞いも定義される。これはカスタムHTMLタグとViewクラスで実現されている。</li>
-        <li>簡単にテストできる。</li>
+        <li><strong><a href="http://angularjs.org/">カスタムHTMLタグでビューモデルとDOMを紐付ける。ビューモデルにセレクタを書かないため、ビューモデルとDOMが疎結合になる。</a></strong></li>
+        <li>双方向データバインディングが強力。イベントを気にせずモデルのデータを正しくすることに集中できる。</li>
+        <li>ユーザがカスタムタグを定義できる。それによって複雑な機能が簡単に実現できる。</li>
+        <li>DI機能でサーバとの通信などをモックに置き換えて簡単にテストできる。</li>
         <li>モデル、ビュー、コントローラ、ルーティング、テンプレート機能がある。</li>
         <li>Web Componentsのような先進的なWebプラットフォームの機能を取り入れている</li>
         <li>アプリケーションテンプレート生成ツールがある(angular-seed)</li>
-        <li>双方向データバインディングが強力。イベントを気にせずモデルのデータを正しくすることに集中できる。</li>
-        <li>FWのファイルサイズが小さい。テンプレートエンジンは文字列をDOMに変換するのではなく、DOMを直接テンプレートとして使用するのでパフォーマンスがいい。　TODO　要確認</li>
+        <li>FWのファイルサイズが小さい。テンプレートエンジンは文字列をDOMに変換するのではなく、DOMを直接テンプレートとして使用するのでパフォーマンスがいい。</li>
+        <li>モデルの変更イベントが連続した場合、イベントの発生を間引くためパフォーマンスがいい。ちなみにknockoutjsは間引かないらしい。</li>
         <li>モダンブラウザのみサポートする場合はjQueryがなくても動く。</li>
         <li>わかりやすい、使いやすい。</li>
         <li>ドキュメントが豊富。</li>
-        <li>スコープがDOMと一致している。　TODO　要確認</li>
-        <li>Chrome拡張のBatarangがChrome Developer’s Toolsに統合されていてデバッグ時にデータを確認しやすい。　TODO　要確認</li>
+        <li>スコープがDOM階層と一致している。</li>
+        <li>Chrome拡張のBatarangがChrome Developer’s Toolsに統合されていてデバッグ時にデータを確認しやすい。</li>
         <li>定型的なコードがかなり減る。</li>
-        <li>クラスの再利用がしやすい。　TODO　要確認</li>
-        <li>カスタムタグによって複雑な機能が簡単に実現できる。</li>
-        <li>DIによって簡単にテストできる。　TODO　要確認</li>
+        <li>クラスの再利用がしやすい。</li>
         <li>Backbone.jsに比べて使えるようになるまでが早い。</li>
     </ul>
     <h3>デメリット</h3>
     <ul>
-        <li>UIの状態を明示的に（自分が書いたコードによって）変更できない。特に、ng-show属性のエレメントをfede inとかのアニメーションを使って表示させることが出来ない　TODO　要確認</li>
+        <li>UIの状態を明示的に（自分が書いたコードによって）変更できない。特に、ng-show属性のエレメントをfede inとかのアニメーションを使って表示させることが出来ない</li>
     </ul>
 </section>
 
@@ -319,7 +320,6 @@
     <ul>
         <li>シンプルで依存するライブラリがない</li>
         <li>非同期API</li>
-        <li>目的特化型だが、柔軟性もある。</li>
         <li>シンプルなモデル、ビュー、コントローラ、イベント、ルーティング</li>
         <li>CoffeeScriptと統合されている</li>
         <li>ドキュメントが豊富</li>
@@ -431,7 +431,6 @@
 <script src="extensions/status/deck.status.js"></script>
 <script src="extensions/navigation/deck.navigation.js"></script>
 <script src="extensions/scale/deck.scale.js"></script>
-<!--<script src="js/app.js"></script>-->
 
 <!-- Initialize the deck -->
 <script>
