@@ -45,6 +45,7 @@
     <h3>github:hosokawa0825</h3>
     <h3>blog:http://d.hatena.ne.jp/anton0825/</h3>
     <h3>2012.10.1</h3>
+    <a href="http://atnd.org/events/31390#comments">ATNDページ</a>
 </section>
 
 <section class="slide" id="problem">
@@ -60,7 +61,7 @@
             <h3>作るアプリの要件を洗い出す</h3>
             <p class="slide">規模</p>
             <p class="slide">複雑度</p>
-            <p class="slide">特殊なUI</p>
+            <p class="slide">特殊な要件（特殊なUI、リアルタイム通信など）</p>
         </li>
         <li>
             <h3 class="slide">各FWの特徴を一覧にまとめる</h3>
@@ -140,6 +141,28 @@
     </ul>
 </section>
 
+<section class="slide" id="Extjs-features-1">
+    <h2><a href="http://extjs.co.jp/">Extjs</a></h2>
+    <h3>メリット</h3>
+    <ul>
+        <li><strong><a href="http://dev.sencha.com/deploy/ext-4.0.0/examples/feed-viewer/feed-viewer.html">UIコンポーネントが非常に豊富。生のHTMLを書くことはほとんどない。</a></strong></li>
+        <li>複雑なUIを比較的簡単に作れる。</li>
+        <li>業務システムを作るにはベストなフレームワークと思われる。</li>
+        <li>Sencha Architectというツールによって、UIをGUI環境で作れる。</li>
+        <li>モバイル用FWのSencha Touchがあり、Extjsと似ているためモバイル用アプリを作りやすい。</li>
+        <li>使えるようになるまでは比較的早い。</li>
+        <li>MVCパターンを使うよう半ば強制されるのでアプリの構造がきれいになりやすい。パッケージ構造とフォルダ・ファイル構成が一致する。</li>
+    </ul>
+    <h3>デメリット</h3>
+    <ul>
+        <li>HTMLを基本的にすべてフレームワークが生成するため、どんなHTMLが生成されるかが把握しづらい。SEOのためにHTMLを最適化するといったことがしづらい。CSSフレームワークが使いづらい。</li>
+        <li>ライセンスの条件は厳しく、わかりづらい。</li>
+        <li>パフォーマンスが悪い。</li>
+        <li>ファイルサイズが大きい。minify,gzip済みで380KB程度</li>
+        <li>ほぼすべてのHTMLをJavaScriptで生成するため、そのままではクローラブルでない（Googleなどの検索エンジンから検索できない）</li>
+    </ul>
+</section>
+
 <section class="slide" id="emberjs-features-1">
     <h2>Ember.js</h2>
     <h3>メリット</h3>
@@ -164,28 +187,6 @@
         <li>エラーメッセージがわかりにくい。</li>
         <li>コミュニティが小さい。</li>
         <li>永続化機能が弱い。localStorageを使ったり、RESTfulAPI経由でデータをサーバと同期したりする機能が無い。</li>
-    </ul>
-</section>
-
-<section class="slide" id="Extjs-features-1">
-    <h2><a href="http://extjs.co.jp/">Extjs</a></h2>
-    <h3>メリット</h3>
-    <ul>
-        <li><strong><a href="http://dev.sencha.com/deploy/ext-4.0.0/examples/feed-viewer/feed-viewer.html">UIコンポーネントが非常に豊富。生のHTMLを書くことはほとんどない。</a></strong></li>
-        <li>複雑なUIを比較的簡単に作れる。</li>
-        <li>業務システムを作るにはベストなフレームワークと思われる。</li>
-        <li>Sencha Architectというツールによって、UIをGUI環境で作れる。</li>
-        <li>モバイル用FWのSencha Touchがあり、Extjsと似ているためモバイル用アプリを作りやすい。</li>
-        <li>使えるようになるまでは比較的早い。</li>
-        <li>MVCパターンを使うよう半ば強制されるのでアプリの構造がきれいになりやすい。パッケージ構造とフォルダ・ファイル構成が一致する。</li>
-    </ul>
-    <h3>デメリット</h3>
-    <ul>
-        <li>HTMLを基本的にすべてフレームワークが生成するため、どんなHTMLが生成されるかが把握しづらい。SEOのためにHTMLを最適化するといったことがしづらい。CSSフレームワークが使いづらい。</li>
-        <li>ライセンスの条件は厳しく、わかりづらい。</li>
-        <li>パフォーマンスが悪い。</li>
-        <li>ファイルサイズが大きい。minify,gzip済みで380KB程度</li>
-        <li>ほぼすべてのHTMLをJavaScriptで生成するため、そのままではクローラブルでない（Googleなどの検索エンジンから検索できない）</li>
     </ul>
 </section>
 
@@ -216,6 +217,7 @@
     <h2>AngularJS</h2>
     <h3>メリット</h3>
     <ul>
+        <li><a href="http://angular.github.com/angular-phonecat/step-3/app/">アプリ</a><a href="http://angular.github.com/angular-phonecat/step-3/test/e2e/runner.html">テスト</a></li>
         <li><strong><a href="http://angularjs.org/">カスタムHTMLタグでビューモデルとDOMを紐付ける。ビューモデルにセレクタを書かないため、ビューモデルとDOMが疎結合になる。</a></strong></li>
         <li>双方向データバインディングが強力。イベントを気にせずモデルのデータを正しくすることに集中できる。</li>
         <li>ユーザがカスタムタグを定義できる。それによって複雑な機能が簡単に実現できる。</li>
