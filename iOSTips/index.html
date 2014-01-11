@@ -47,12 +47,12 @@
 				<section>
           <section>
             <h2>CGRectのリテラルの書き方</h2>
-            {% highlight objective-c %}
-            CGRect rect1 = CGRectMake(0, 0, 100, 200);
-            CGRect rect2 = {0, 0, 100, 200};
-            CGRect rect3 =  {.origin = {0, 0}, .size = {100, 200}};
-            CGRect rect4 =  {.origin = {.x = 0, .y = 0}, .size = {.width = 100, .height = 200}};
-            {% endhighlight %}
+            <pre><code contenteditable>
+              CGRect rect1 = CGRectMake(0, 0, 100, 200);
+              CGRect rect2 = {0, 0, 100, 200};
+              CGRect rect3 =  {.origin = {0, 0}, .size = {100, 200}};
+              CGRect rect4 =  {.origin = {.x = 0, .y = 0}, .size = {.width = 100, .height = 200}};
+            </code></pre>
           </section>
           <section>
             <h2>こうも書けます{x, y, width, height}</h2>
