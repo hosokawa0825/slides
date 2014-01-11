@@ -35,8 +35,8 @@
 			<div class="slides">
 
 				<section>
-					<h3>Useful Sintaxes</h3>
-          <h3>Toru Hosokawa</h3>
+					<h3>便利なSyntaxと記号の出し方</h3>
+          <b>Toru Hosokawa</b><br>
           twitter:<a href="https://twitter.com/anton0825">@anton0825</a><br>
           facebook:<a href="http://www.facebook.com/toru.hosokawa1">toru.hosokawa1</a><br>
           github:<a href="https://github.com/hosokawa0825">hosokawa0825</a><br>
@@ -53,19 +53,22 @@
             </code></pre>
           </section>
           <section>
-            <h3>こうも書けます{x, y, width, height}</h3>
+            <h3>こうも書けます</h3>
+            <b>{x, y, width, height}</b>
             <pre><code contenteditable>
     CGRect rect2 = {0, 0, 100, 200};
             </code></pre>
           </section>
           <section>
-            <h3>こうも書けます{.origin = {x, y}, .size = {width, height}}</h3>
+            <h3>こうも書けます</h3>
+            <b>{.origin = {x, y}, .size = {width, height}}</b>
             <pre><code contenteditable>
     CGRect rect3 =  {.origin = {0, 0}, .size = {100, 200}};
             </code></pre>
           </section>
           <section>
-            <h3>こうも書けます{.origin = {.x = x, .y = y}, .size = {.width = width, .height = height}}</h3>
+            <h3>こうも書けます</h3>
+            <b>{.origin = {.x = x, .y = y}, .size = {.width = width, .height = height}}</b>
             <pre><code contenteditable>
     CGRect rect4 =  {.origin = {.x = 0, .y = 0}, .size = {.width = 100, .height = 200}};
             </code></pre>
@@ -73,154 +76,86 @@
 				</section>
         <section>
           <section>
-            <h2>コードブロックの書き方</h2>
-    self.helpButton = ({	// helpbutton
+            <h3>戻り値を返すコードブロックの書き方</h3>
+            <pre><code contenteditable>
+    // ({})で囲まれたブロックが即時実行され、最後に評価された変数がreturnされる。
+    self.helpButton = ({
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         CGRect buttonRect = innerBounds;
         buttonRect.size = [button sizeThatFits:CGSizeMake(400, 400)];
         buttonRect.origin.x = CGRectGetMaxX(innerBounds)-CGRectGetWidth(buttonRect);
-        button.frame = UIEdgeInsetsInsetRect(buttonRect, UIEdgeInsetsMake(0, -10, -20, -10));
-        [button addTarget:self action:@selector(helpAction:) forControlEvents:UIControlEventTouchUpInside];
+        button.frame = buttonRect
         [self addSubview:button];
-        button;
+        button; // buttonがself.helpButtonに代入される
     });
-            <pre><code contenteditable>
             </code></pre>
           </section>
           <section>
             <ul>
-              <li>最後に評価された変数がreturnされます。</li>
-              <li>スコープがコードブロック内に閉じている。</li>
+              <li>スコープがコードブロック内に閉じているので変数名に気を遣わなくていいです。</li>
+              <li>処理をメソッドに切り出すより見やすい気がします。</li>
               <li>主に初期化する時に使います。</li>
             </ul>
           </section>
         </section>
-
-				<section>
-          <section>
-            <h2>yeomanを使って解決！</h2>
-            <ul>
-              <li>フロントエンド開発の<br>
-                ベストプラクティスを集めたツール</li>
-            </ul>
-            <a href="http://yeoman.io/index.html">
-              <img width="70%" src="images/yeoman.png">
-            </a>
-          </section>
-          <section>
-            <table>
-              <thead>
-                <th>機能</th>
-                <th>ライブラリ</th>
-              </thead>
-              <tbody>
-                <tr><td>パッケージマネージャ</td><td>bower.js</td></tr>
-                <tr><td>scaffold生成</td><td>独自</td></tr>
-                <tr><td>ビルド</td><td>grunt.js</td></tr>
-                <tr><td>webサーバ</td><td>grunt.js</td></tr>
-                <tr><td>テスト実行</td><td>grunt.js, mocha, PhantomJS</td></tr>
-                <tr><td>coffeescriptのコンパイル</td><td>coffee.js</td></tr>
-                <tr><td>sass,scssのコンパイル</td><td>compass</td></tr>
-              </tbody>
-            </table>
-          </section>
-          <section>
-            <table>
-              <thead>
-                <th>機能</th>
-                <th>ライブラリ</th>
-              </thead>
-              <tbody>
-                <tr><td>css,jsの結合・圧縮</td><td>uglify.js</td></tr>
-                <tr><td>ファイルの更新監視</td><td>grunt.js, liveReload</td></tr>
-                <tr><td>jsのlint</td><td>jsHint</td></tr>
-                <tr><td>html,css内のjs,css,imgへのリンクを圧縮後のファイルへのリンクに置き換える</td><td>grunt.js</td></tr>
-                <tr><td>htmlの圧縮</td><td>Html-minifier</td></tr>
-                <tr><td>jpg,png画像の圧縮</td><td>OptiPNG/JPEGtran</td></tr>
-              </tbody>
-            </table>
-          </section>
-				</section>
-
-				<section>
-          <section>
-            <h2>デモ</h2>
-            <ul>
-              <li>インストール<br>
-                curl -L get.yeoman.io | bash
-              </li>
-              <li>
-                scaffold生成<br>
-                yeoman init
-              </li>
-              <li>
-                Webサーバ起動<br>
-                yeoman server
-              </li>
-              <li>
-                テスト実行<br>
-                yeoman test
-              </li>
-            </ul>
-          </section>
-          <section>
-            <h2>デモ</h2>
-            <ul>
-              <li>
-                ビルド<br>
-                yeoman build<br>
-                yeoman build:minify
-              </li>
-              <li>
-                パッケージ管理<br>
-                yeoman install jquery
-              </li>
-              <li>
-                パッケージ更新<br>
-                yeoman update
-              </li>
-            </ul>
-          </section>
-          <section>
-            <h2>デモ</h2>
-            <ul>
-              <li>
-                gruntタスクの追加<br>
-                例：autotest機能の追加<br>
-                Gruntfile.jsにこれを追加するだけ！
-                <pre><code contenteditable>
-  test: {
-    files: [
-      'test/**/*.html'
-    ],
-    tasks: 'test reload'
-  },
-                </code></pre>
-              </li>
-            </ul>
-          </section>
-				</section>
         <section>
           <section>
-            <h2>イマイチなところ</h2>
+            <h3>Unicodeを使って記号を表示する</h3>
+            <b>\uの後にコードポイントを書くとコードポイントに対応する文字を表示出来る</b>
+            <pre><code contenteditable>
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"title"
+        message:@"message" delegate:nil
+        cancelButtonTitle:@"\u26D4 NG"
+        otherButtonTitles:@"\u2705 OK", nil];
+            </code></pre>
+            <img src="images/unicode_sign_sample.png" class="fragment">
+          </section>
+          <section>
+            <b>表示したい記号とコードポイントの調べ方</b>
             <ul>
-              <li>
-                buildタスクをカスタマイズできない<br>
-                <a href="https://github.com/yeoman/yeoman/issues/491">要望上がってますがまだ対応されてません。</a><br>
-                <br>
-                ビルドタスクの例：<br>
-                default: Runs concat css min img rev usemin manifest<br>
-                <br>
-                例えばTypeScriptのコンパイルも追加する、ということはできない。
-              </li>
+              <li>macの「システム環境設定＞キーボード＞メニューバーにキーボードビューアと文字ビューアを表示」をチェック</li>
+              <img src="images/system_preferences.png" width="50%" height="50%">
+            </ul>
+          </section>
+          <section>
+            <ul>
+              <li>メニューバーから文字ビューアを表示する</li>
+              <img src="images/menubar_menu.png">
+            </ul>
+          </section>
+          <section>
+            <ul>
+              <li>文字ビューアから表示したい文字を探し、右クリックして「文字の情報をコピー」</li>
+              <li>これをペーストするとコードポイントがわかります</li>
+              <img src="images/character_viewer.png">
             </ul>
           </section>
         </section>
         <section>
-          <h2>ツール情報共有サイト</h2>
-          <a href="http://setapp.me/home">
-            <img width="70%" src="images/setapp.png">
-          </a>
+          <section>
+            <h3>三項演算子を使ったnilチェック</h3>
+            <b>普通のnilチェック</b>
+            <pre><code contenteditable>
+    NSString *msgFullString;
+    if (msg) {
+        msgFullString = [NSString stringWithFormat:@"Message: %@", msg];
+    } else {
+        msgFullString = [NSString stringWithFormat:@"Message: %@", @"Unknown error"];
+    }
+            </code></pre>
+          </section>
+          <section>
+            <b>三項演算子を使ったnilチェック</b>
+            <pre><code contenteditable>
+    NSString *msgFullString = [NSString stringWithFormat:@"Message: %@", msg ? msg : @"Unknown error"];
+            </code></pre>
+          </section>
+          <section>
+            <b>三項演算子の２項目は省略出来ます</b>
+            <pre><code contenteditable>
+    NSString *msgFullString = [NSString stringWithFormat:@"Message: %@", msg ? : @"Unknown error"];
+            </code></pre>
+          </section>
         </section>
       </div>
     </div>
