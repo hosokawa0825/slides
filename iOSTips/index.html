@@ -46,21 +46,55 @@
 
 				<section>
           <section>
-            <h2>CGRectのリテラルの書き方</h2>
+            <h3>CGRectのリテラルの書き方</h3>
+            <h3>普通の書き方</h3>
             <pre><code contenteditable>
-              CGRect rect1 = CGRectMake(0, 0, 100, 200);
-              CGRect rect2 = {0, 0, 100, 200};
-              CGRect rect3 =  {.origin = {0, 0}, .size = {100, 200}};
-              CGRect rect4 =  {.origin = {.x = 0, .y = 0}, .size = {.width = 100, .height = 200}};
+    CGRect rect1 = CGRectMake(0, 0, 100, 200);
             </code></pre>
           </section>
           <section>
-            <h2>こうも書けます{x, y, width, height}</h2>
-            {% highlight objective-c %}
-            CGRect rect2 = {0, 0, 100, 200};
-            {% endhighlight %}
+            <h3>こうも書けます{x, y, width, height}</h3>
+            <pre><code contenteditable>
+    CGRect rect2 = {0, 0, 100, 200};
+            </code></pre>
+          </section>
+          <section>
+            <h3>こうも書けます{.origin = {x, y}, .size = {width, height}}</h3>
+            <pre><code contenteditable>
+    CGRect rect3 =  {.origin = {0, 0}, .size = {100, 200}};
+            </code></pre>
+          </section>
+          <section>
+            <h3>こうも書けます{.origin = {.x = x, .y = y}, .size = {.width = width, .height = height}}</h3>
+            <pre><code contenteditable>
+    CGRect rect4 =  {.origin = {.x = 0, .y = 0}, .size = {.width = 100, .height = 200}};
+            </code></pre>
           </section>
 				</section>
+        <section>
+          <section>
+            <h2>コードブロックの書き方</h2>
+    self.helpButton = ({	// helpbutton
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        CGRect buttonRect = innerBounds;
+        buttonRect.size = [button sizeThatFits:CGSizeMake(400, 400)];
+        buttonRect.origin.x = CGRectGetMaxX(innerBounds)-CGRectGetWidth(buttonRect);
+        button.frame = UIEdgeInsetsInsetRect(buttonRect, UIEdgeInsetsMake(0, -10, -20, -10));
+        [button addTarget:self action:@selector(helpAction:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:button];
+        button;
+    });
+            <pre><code contenteditable>
+            </code></pre>
+          </section>
+          <section>
+            <ul>
+              <li>最後に評価された変数がreturnされます。</li>
+              <li>スコープがコードブロック内に閉じている。</li>
+              <li>主に初期化する時に使います。</li>
+            </ul>
+          </section>
+        </section>
 
 				<section>
           <section>
