@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Jenkins+Doxygen+Dashで詳細設計書配布を自動化する方法</title>
+		<meta name="author" content="toru hosokawa">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<section>
+					<h3>Jenkins+Doxygen+Dashで</h3>
+          <h3>詳細設計書配布を自動化する方法</h3>
+          <b>Toru Hosokawa</b><br>
+          twitter:<a href="https://twitter.com/anton0825">@anton0825</a><br>
+          facebook:<a href="http://www.facebook.com/toru.hosokawa1">toru.hosokawa1</a><br>
+          github:<a href="https://github.com/hosokawa0825">hosokawa0825</a><br>
+          blog:<a href="http://d.hatena.ne.jp/anton0825/">http://d.hatena.ne.jp/anton0825/</a><br>
+          <h4>2014.2.15</h4>
+				</section>
+
+				<section>
+          <section>
+            <h3>詳細設計書(APIドキュメント)の問題点</h3>
+            <ul class="fragment">
+              <li>メンテされない</li>
+              <li>知りたい情報がどこにあるかわからない</li>
+              <li>ドキュメント書くのめんどくさい</li>
+            </ul>
+          </section>
+          <section>
+            <h3>解決策</h3>
+            <ul class="fragment">
+              <li>メンテされない</li>
+              <ul><li>ヘッダファイルにコメントを書き、Doxygenでドキュメントを生成することでメンテコストを下げる</li></ul>
+              <ul><li>さらに、Jenkinsを使って常に最新のドキュメントを生成・配布する</li></ul>
+              <li>知りたい情報がどこにあるかわからない</li>
+              <ul><li>Dashで素早く検索出来るようにする</li></ul>
+              <li>ドキュメント書くのめんどくさい</li>
+              <ul><li>VVDocumenterを使って楽に書けるようにする</li></ul>
+            </ul>
+          </section>
+				</section>
+        <section>
+          <h3>VVDocumenter</h3>
+          <p>メソッドの手前で///を打つとAPIドキュメント用コメントが生成されるXCodeプラグイン</p>
+          <img class="fragment" src="images/VVDocumenter.gif">
+        </section>
+        <section>
+          <section>
+            <h3>Doxygen</h3>
+            <p>APIドキュメントを生成するツール</p>
+            <p>様々な形式に対応しています。</p>
+            <p>カスタマイズも結構できる</p>
+          </section>
+          <section>
+            <p>注意点</p>
+            <p>柔軟なだけあって、</p>
+            <p>設定項目がめちゃくちゃ多い！</p>
+            <div class="fragment">
+              <p>おすすめ設定</p>
+              <p style="font-size: small">
+                # 解析したいプロジェクトの名前<br>
+                PROJECT_NAME = "Your Project Name"<br>
+                # 再帰的にソースコードのファイルを探索する<br>
+                RECURSIVE = YES<br>
+                # LaTeX で出力しない<br>
+                GENERATE_LATEX = NO<br>
+                # Graphviz で出力するための DOT ファイルを作る<br>
+                HAVE_DOT = YES<br>
+                # DOT ファイルの生成をマルチスレッドで行う<br>
+                DOT_NUM_THREADS = 4<br>
+                # コールグラフ (呼び出す側) を作る<br>
+                CALL_GRAPH = YES<br>
+                # コールグラフ (呼び出される側) を作る<br>
+                CALLER_GRAPH = YES<br>
+                # Dash用Docsetを生成する<br>
+                GENERATE_DOCSET   = YES<br>
+                # 画面上部のタブをつけない<br>
+                DISABLE_INDEX     = YES<br>
+                # 検索用テキストボックスをつけない<br>
+                SEARCHENGINE      = NO<br>
+                # 画面左側のTreeViewをつけない<br>
+                GENERATE_TREEVIEW = NO<br>
+                # 出力先ディレクトリ<br>
+                OUTPUT_DIRECTORY       = "your output directory"<br>
+                # 解析するソースコードがあるディレクトリ<br>
+                INPUT = "project directory"
+              </p>
+            </div>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h3>Dash</h3>
+            <p>様々なAPIドキュメントを素早く検索出来るアプリ</p>
+            <img class="fragment" src="images/Dash.png" style="height:300">
+          </section>
+          <section>
+            <h3>Dashのいいところ</h3>
+            <ul>
+              <li>Apple公式APIドキュメントを検索するだけでなく、Doxygenで生成したAPIドキュメントを検索することも可能</li>
+              <li>doset feed(ドキュメントのバージョンとダウンロード先URLを書いたXMLファイル)を用意することで、ドキュメントの自動アップデートが可能</li>
+            </ul>
+          </section>
+        </section>
+        <section>
+          <h3>Jenkins+Doxygen+Dashで詳細設計書を配布する構成</h3>
+        </section>
+
+
+      </div>
+    </div>
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/highlight.js', async: true, callback: function() { window.hljs.initHighlightingOnLoad(); } },
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'lib/js/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'lib/js/data-markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+		</script>
+
+	</body>
+</html>
