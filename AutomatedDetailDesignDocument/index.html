@@ -70,7 +70,7 @@
         <section>
           <h3>VVDocumenter</h3>
           <p>メソッドの手前で///を打つとAPIドキュメント用コメントが生成されるXCodeプラグイン</p>
-          <img class="fragment" src="images/VVDocumenter.gif">
+          <img src="images/VVDocumenter.gif">
         </section>
         <section>
           <section>
@@ -120,7 +120,7 @@
           <section>
             <h3>Dash</h3>
             <p>様々なAPIドキュメントを素早く検索出来るアプリ</p>
-            <img class="fragment" src="images/Dash.png" style="height:300">
+            <img src="images/Dash.png">
           </section>
           <section>
             <h3>Dashのいいところ</h3>
@@ -131,10 +131,67 @@
           </section>
         </section>
         <section>
-          <h3>Jenkins+Doxygen+Dashで詳細設計書を配布する構成</h3>
+          <h3>Jenkins+Doxygen+Dashで<br>APIドキュメントを配布する構成</h3>
+          <img src="images/構成.png">
         </section>
-
-
+        <section>
+          <section>
+            <h3>JenkinsでDocset Feedとドキュメントを生成するスクリプト</h3>
+            <p style="text-align: left;font-size: smaller">
+              # docset Feed用xmlを作成<br>
+              sed "s/{BUILD_NUMBER}/${BUILD_NUMBER}/" menuFxDocsetFeedTemplate.xml > build/menuFxDocsetFeed.xml<br>
+              <br>
+              # docsetを作成<br>
+              doxygen<br>
+              cd build/html<br>
+              make<br>
+              mv org.doxygen.Project.docset menuFx.docset<br>
+              tar zcvf menuFx.docset.tgz menuFx.docset<br>
+              mv menuFx.docset.tgz ${WORKSPACE}/build/menuFx.docset.tgz<br>
+            </p>
+            <a href="texts/menuFxDocsetFeed.xml">DocsetFeedの例</a>
+          </section>
+          <section>
+            <h3>Docset FeedとDocsetを開発用Macからダウンロード可能にする</h3>
+            <p>Jenkinsの「成果物を保存」でDocset FeedとDocsetを保存するだけ</p>
+            <img class="fragment" src="images/成果物を保存.png">
+            <p style="font-size: smaller" class="fragment">
+              最後にビルドした際にできたDocset FeedとDocsetが<br>
+              下記のようなURLからダウンロード可能
+              http://localhost:8080/job/pjname/lastCompletedBuild/artifact/docsetFeed.xml
+              http://localhost:8080/job/pjname/lastCompletedBuild/artifact/docset.tgz
+            </p>
+          </section>
+          <section>
+            <h3>DashにDocset Feedを登録する</h3>
+            <p style="font-size: smaller">
+              URLスキーマを使うとリンクをクリックするだけで<br>
+              Docset Feedを登録できる。<br>
+              dash-feed://の後にDocset FeedのURLを<br>
+              URLエンコードしたものを繋げる。
+            </p>
+            <p style="font-size: large"><a href="dash-feed://http%3A%2F%2Flocalhost%3A8080%2Fjob%2FbuildMenuFxDevelopment%2F23%2Fartifact%2Fbuild%2FmenuFxDocsetFeed.xml">dash-feed://http%3A%2F%2Flocalhost%3A8080%2Fjob%2Fpjname%2FlastCompletedBuild%2Fartifact%2FdocsetFeed.xml</a></p>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h3>最後に宣伝・・・</h3>
+            <p style="font-size: smaller">
+              menuFxというMacアプリを最近リリースしました。<br>
+              為替レートをメニューバーでチェックできるアプリです。
+            </p>
+            <img src="images/menuFx.gif">
+          </section>
+          <section>
+            <h3>技術的なハイライト</h3>
+            <ul style="font-size: smaller">
+              <li>ReactiveCocoaを使ってMVVMパターンでアプリを構成</li>
+              <li>クライアント・サーバ間の通信はSocket.io</li>
+              <li>サーバはNode.js</li>
+            </ul>
+            <img src="images/menuFxアーキテクチャ図.png">
+          </section>
+        </section>
       </div>
     </div>
 		<script src="lib/js/head.min.js"></script>
