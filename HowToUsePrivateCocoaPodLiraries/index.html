@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>CocoaPodを使ってアプリを構成する方法</title>
+		<title>CocoaPodを使ってアプリを疎結合・再利用可能にする方法</title>
 		<meta name="author" content="toru hosokawa">
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -35,25 +35,45 @@
 			<div class="slides">
 
 				<section>
-					<h3>CocoaPodを使ってアプリを構成する方法</h3>
+					<h3>CocoaPodを使ってアプリを<br>疎結合・再利用可能にする方法</h3>
           <b>Toru Hosokawa</b><br>
           twitter:<a href="https://twitter.com/anton0825">@anton0825</a><br>
           facebook:<a href="http://www.facebook.com/toru.hosokawa1">toru.hosokawa1</a><br>
           github:<a href="https://github.com/hosokawa0825">hosokawa0825</a><br>
           blog:<a href="http://d.hatena.ne.jp/anton0825/">http://d.hatena.ne.jp/anton0825/</a><br>
-          <h4>2014.3.12</h4>
+          <h4>2014.3.9</h4>
 				</section>
 
+        <section>
+          <h3>Objective-Cでコードを書いてて<br>
+              困ること</h3>
+          <ul>
+            <li>
+              アプリを構造化するための機能が弱い
+              <ul>
+                <li>Packageスコープが無い</li>
+                <li>名前空間を分けられない</li>
+              </ul>
+            </li>
+            <li>
+              コードの再利用が難しい
+              <ul>
+                <li>一つのクラスを別のプロジェクトで使おうとしたら、依存しているクラスが沢山あってそれもコピーしないと使えない</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
 				<section>
           <section>
-            <h3>CocoaPod</h3>
-            <p>普通は公開されているOSSのライブラリをインストールするのに使うと思いますが、プライベートなライブラリを作るのにも使えます。</p>
+            <h3>解決策：CocoaPod</h3>
+            <p>アプリのコードを複数のPodライブラリに分割し、CocoaPodを使ってその依存関係を解決する。</p>
+            <img src="images/アプリ構成図.png">
           </section>
           <section>
             <h3>プライベートライブラリ作成手順</h3>
             <ul>
-              <li>Specsリポジトリを作る</li>
-              <li>開発マシンで以下を実行する<br>
+              <li>プライベートSpecsリポジトリを作る</li>
+              <li>プライベートSpecsリポジトリからライブラリをインストール可能にする<br>
                 pod repo add private git@github.org:username/specs.git</li>
               <li>Specsリポジトリにpodspecファイルを置く。配置ルールは「ライブラリ名/バージョン番号/*.podspec」<br>
                 例：Specs/MyLib/0.0.1/MyLib.podspec</li>
@@ -62,20 +82,12 @@
 				</section>
         <section>
           <section>
-            <h3>プライベートライブラリ<br>
-              を使うメリット</h3>
+            <h3>メリット</h3>
             <ul>
-              <li>コードの再利用が簡単に出来る
-                <ul>
-                  <li>よくある問題：再利用したいクラスは一つだけなのに、依存するクラスが多くてそれを全部コピーしてくるのが大変<br>
-                    →CocoaPodが依存関係を解決してくれるので、pod installを実行するだけで良くなる</li>
-                </ul>
-              </li>
-              <li>コードの保守性が上がる
-                <ul>
-                  <li>よくある問題：複数のアプリにコピーしているクラスに不具合があった。全部のアプリで修正しないと・・・<br>
-                    →修正するのは1箇所で良くなる。</li>
-                </ul>
+              <li>
+                コードの再利用が簡単になる<br>
+                →pod installを実行するだけでコードを再利用出来るようになる。<br>
+                複数のアプリで使用しているコードに不具合修正を入れた場合も修正箇所は一箇所で良くなる。
               </li>
             </ul>
           </section>
@@ -95,31 +107,35 @@
                     s.public_header_files = 'MyLib/Classes/**/*_Public.h'
                   </li>
                 </ul>
-                これによってライブラリのメソッドのほとんどを隠蔽することができ、ライブラリの使いやすさや堅牢性が上がりました。
+                これによってライブラリのメソッドのほとんどを隠蔽することができ、ライブラリの使いやすさや堅牢性が上がる。
               </li>
             </ul>
           </section>
           <section>
-            <h3>プライベートライブラリ<br>
-              を使うメリット</h3>
+            <h3>メリット</h3>
             <ul>
-              <li>アプリの結合度が下がる<br>
-                やり方：<br>
-                アプリを複数のサブアプリに分割し、それぞれをPodライブラリとする。<br>
-                タブバーを使っているアプリなら、タブ毎にサブアプリにするとか。<br>
-                サブアプリ間のやりとりはNotificationを使って行う。<br>
+              <li>パッケージ毎にPrefixを分けることで名前空間を分けられる。<br>
+                例：AFNetworkingの「AF」<br>
+                名前空間を分けることで、<br>
+                名前の衝突をあまり気にしないでよくなり、<br>
+                クラス名をシンプルにすることが出来る。<br>
+                例：DetailedStockForOrderTableViewController
+                →SSTStockTableViewController
+              </li>
+            </ul>
+          </section>
+
+          <section>
+            <h3>メリット</h3>
+            <ul>
+              <li>依存関係を強制できるので、アプリの結合度が下がる。<br>
+                例えば、モデルクラスをまとめて一つのPodにすれば<br>
+                モデルがビューやコントローラに依存しないことを保障できる。<br>
               </li>
             </ul>
           </section>
           <section>
-            <h3>プライベートライブラリ<br>
-              を使うメリット</h3>
-            <p>アプリ構成</p>
-            <img src="images/アプリ構成図.png">
-          </section>
-          <section>
-            <h3>プライベートライブラリ<br>
-              を使うメリット</h3>
+            <h3>メリット</h3>
             <ul>
               <li>サブアプリ単位でアプリのバージョンを切り替えられる。<br>
                   例えば、サブアプリ１のバージョンAとサブアプリ２のバージョンBを組み合わせてみるとか。<br>
@@ -131,20 +147,19 @@
         </section>
         <section>
           <section>
-            <h3>プライベートライブラリ<br>
-              を使うデメリット</h3>
+            <h3>デメリット</h3>
             <ul>
               <li>以下をライブラリの数だけ作らないといけない</li>
               <ul>
                 <li>XCodeのプロジェクト</li>
                 <li>JenkinsなどのCI</li>
               </ul>
-            </ul><br>
-            XCodeのプロジェクトの作成・設定の自動化をする<a href="https://github.com/krzysztofzablocki/crafter">crafter</a>というツールがあるので、これを使うと多少楽になりそう(未検証)
+              <br>
+              XCodeのプロジェクトの作成・設定の自動化をする<a href="https://github.com/krzysztofzablocki/crafter">crafter</a>というツールがあるので、これを使うと多少楽になりそう(未検証)
+            </ul>
           </section>
           <section>
-            <h3>プライベートライブラリ<br>
-              を使うデメリット</h3>
+            <h3>デメリット</h3>
             <ul>
               <li>ライブラリの修正をアプリに取り込むのが面倒<br>
                 通常の手順：
@@ -153,29 +168,49 @@
                   <li>新バージョン用のpodspecを作り、Pushする</li>
                   <li>ローカルでpod updateを実行する</li>
                 </ul>
+                <br>
                 これはPodfileで以下のようにbranch指定でインストールすることである程度解決出来る。<br>
                 pod 'AFNetworking', :git => 'https://github.com/AFNetworking/AFNetworking', :branch => 'master'
               </li>
             </ul>
           </section>
           <section>
-            <h3>プライベートライブラリ<br>
-              を使うデメリット</h3>
+            <h3>デメリット</h3>
+            <ul>
+              <li>
+                branch指定でインストールした場合、<br>
+                pod updateを実行するタイミングによってライブラリのバージョンが異なる。<br>
+                さらに、現在ローカルにあるのはどのバージョンかを知ることが出来ない。<br>
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h3>デメリット</h3>
             <ul>
               <li>Podfileでインストールするライブラリが依存しているライブラリは必ず最新版をインストールするようには出来ない。</li>
             </ul>
             <img src="images/Podfileで最新をインストール出来るライブラリの説明.png">
           </section>
           <section>
-            <h3>プライベートライブラリ<br>
-              を使うデメリット</h3>
             <ul>
-              <li>CocoaPodには、バージョン番号が0.0.1の場合常にmaster branchをインストールするという仕様があるので、これを使う。<br>
-                Specsリポジトリを以下のように0.0.1のバージョンのみにすればよい。
-                Specs/MyLib/0.0.1/MyLib.podspec
+              <li>
+                依存しているすべてのPodのmasterの更新を見張っておき、<br>
+                更新されたら自動でダウンロードしてくれる仕組みが欲しい・・・<br>
+                やり方知ってる人いたら共有お願いします！
               </li>
             </ul>
           </section>
+
+
+          <!--<section>-->
+            <!--<h3>問題点</h3>-->
+            <!--<ul>-->
+              <!--<li>CocoaPodには、バージョン番号が0.0.1の場合常にmaster branchをインストールするという仕様があるので、これを使う。<br>-->
+                <!--Specsリポジトリを以下のように0.0.1のバージョンのみにすればよい。-->
+                <!--Specs/MyLib/0.0.1/MyLib.podspec-->
+              <!--</li>-->
+            <!--</ul>-->
+          <!--</section>-->
         </section>
       </div>
     </div>
