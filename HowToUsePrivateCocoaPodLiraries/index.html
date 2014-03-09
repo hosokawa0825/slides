@@ -66,16 +66,18 @@
 				<section>
           <section>
             <h3>解決策：CocoaPod</h3>
-            <p>アプリのコードを複数のPodライブラリに分割し、CocoaPodを使ってその依存関係を解決する。</p>
+            <p>
+              アプリのコードを複数のPodライブラリに分割し、CocoaPodを使ってその依存関係を解決する。
+            </p>
             <img src="images/アプリ構成図.png">
           </section>
           <section>
-            <h3>プライベートライブラリ作成手順</h3>
+            <h3>自社用Podライブラリ作成手順</h3>
             <ul>
-              <li>プライベートSpecsリポジトリを作る</li>
-              <li>プライベートSpecsリポジトリからライブラリをインストール可能にする<br>
+              <li>Specsリポジトリを作る</li>
+              <li>Specsリポジトリからライブラリをインストール可能にする<br>
                 pod repo add private git@github.org:username/specs.git</li>
-              <li>Specsリポジトリにpodspecファイルを置く。配置ルールは「ライブラリ名/バージョン番号/*.podspec」<br>
+              <li>Specsリポジトリにpodspecファイルを置く。配置ルールは「ライブラリ名/バージョン番号/ライブラリ名.podspec」<br>
                 例：Specs/MyLib/0.0.1/MyLib.podspec</li>
             </ul>
           </section>
@@ -92,8 +94,7 @@
             </ul>
           </section>
           <section>
-            <h3>プライベートライブラリ<br>
-              を使うメリット</h3>
+            <h3>メリット</h3>
             <ul>
               <li>Packageスコープのメソッドを定義できる。<br>
                 やり方：<br>
@@ -177,19 +178,19 @@
           <section>
             <h3>デメリット</h3>
             <ul>
+              <li>Podfileでインストールするライブラリが依存しているライブラリは必ず最新版をインストールするようには出来ない。</li>
+            </ul>
+            <img src="images/Podfileで最新をインストール出来るライブラリの説明.png">
+          </section>
+          <section>
+            <h3>デメリット</h3>
+            <ul>
               <li>
                 branch指定でインストールした場合、<br>
                 pod updateを実行するタイミングによってライブラリのバージョンが異なる。<br>
                 さらに、現在ローカルにあるのはどのバージョンかを知ることが出来ない。<br>
               </li>
             </ul>
-          </section>
-          <section>
-            <h3>デメリット</h3>
-            <ul>
-              <li>Podfileでインストールするライブラリが依存しているライブラリは必ず最新版をインストールするようには出来ない。</li>
-            </ul>
-            <img src="images/Podfileで最新をインストール出来るライブラリの説明.png">
           </section>
           <section>
             <ul>
@@ -211,6 +212,14 @@
               <!--</li>-->
             <!--</ul>-->
           <!--</section>-->
+        </section>
+        <section>
+          <h3>最後に・・・</h3>
+          弊社ではiOSエンジニアを募集しています！<br>
+          求めるスキル：UIKitを使ったアプリの開発経験<br>
+          （Cocos2D、PhoneGap等を使わない素のネイティブアプリ）<br>
+          興味があれば御連絡下さい<br>
+          <a href="https://twitter.com/anton0825">@anton0825</a><br>
         </section>
       </div>
     </div>
