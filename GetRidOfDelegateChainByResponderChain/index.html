@@ -88,13 +88,11 @@
             <ul>
               <li>任意のobjectをnext responderに設定出来る</li>
               <li>next responderを設定しない場合はdefaultのnext responderが使われる</li>
+              <li>viewWillAppearの中ではnextResponderがnilになっていることがある</li>
             </ul>
             ↓<br>
             NSObjectのカテゴリとしてnext responderを変更可能なResponder Chainを実装<br>
             <a href="https://gist.github.com/hosokawa0825/9501951">NSObject+CustomMethod.m</a>
-          </section>
-          <section>
-
           </section>
           <section>
             <h3>その他Tips</h3>
