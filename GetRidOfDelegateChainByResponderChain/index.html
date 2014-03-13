@@ -77,9 +77,13 @@
               <li>
                 ModalViewはWindow objectのsubviewであり、RootViewControllerから始まるView Hierarchyの下に無い。
               </li>
+              <li>
+                viewWillAppearの中ではnextResponderがnilになっていることがある。<br>
+                その場合、viewWillAppearの中からイベントを発生させられない。
+              </li>
             </ul>
             ↓<br>
-            これらのView内で発生したeventはPopoverControllerやModalViewのViewControllerを保持しているViewControllerに伝えたい
+            これらのView・Event内で発生したeventはPopoverControllerやModalViewのViewControllerを保持しているViewControllerに伝えたい
           </section>
 				</section>
         <section>
@@ -88,7 +92,6 @@
             <ul>
               <li>任意のobjectをnext responderに設定出来る</li>
               <li>next responderを設定しない場合はdefaultのnext responderが使われる</li>
-              <li>viewWillAppearの中ではnextResponderがnilになっていることがある</li>
             </ul>
             ↓<br>
             NSObjectのカテゴリとしてnext responderを変更可能なResponder Chainを実装<br>
