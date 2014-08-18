@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Run Script Tips</title>
+		<meta name="author" content="toru hosokawa">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<section>
+					<h3>Run Script Tips</h3>
+          <b>Toru Hosokawa</b><br>
+          twitter:<a href="https://twitter.com/anton0825">@anton0825</a><br>
+          facebook:<a href="http://www.facebook.com/toru.hosokawa1">toru.hosokawa1</a><br>
+          github:<a href="https://github.com/hosokawa0825">hosokawa0825</a><br>
+          blog:<a href="http://d.hatena.ne.jp/anton0825/">http://d.hatena.ne.jp/anton0825/</a><br>
+          <h4>2014.8.20</h4>
+				</section>
+
+        <section>
+          <section>
+            <h3>Run Scriptをレビューしやすくする</h3>
+            <p>Run Scriptの例</p>
+            <img src="images/runscript.png" style="height: 600px">
+          </section>
+          <section>
+            <p>pbxprojファイルでは1行になっていてレビューしづらい</p>
+            <img src="images/runscriptGitDiff.png" style="height: 600px">
+          </section>
+          <section>
+            <p>レビューしやすくするために、スクリプトをファイルにする</p>
+            <img src="images/addScriptsGroup.png" style="height: 400px">
+          </section>
+          <section>
+            <ul>
+              <li>実行権限を追加　sudo chmod 774 *.sh</li>
+              <li>
+                スクリプトファイルをintermediatesフォルダの下にコピーする。
+                Run Scriptでスクリプトファイルを実行する。
+              </li>
+              <img src="images/addBuildPhases.png" style="height: 500px">
+            </ul>
+          </section>
+          <section>
+            <p>これでスクリプトのDiffが見やすい</p>
+            <img src="images/runscriptGitDiff2.png" style="height: 600px">
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h3>TODOをビルド警告にする</h3>
+            <p>Run Scriptで以下のスクリプトを実行するとTODO:という文字列をビルド警告にすることができる</p>
+            <hr>
+            <p style="text-align: left;font-size: smaller">
+              KEYWORDS="TODO:"<br>
+              find ${SRCROOT} \( -name "*.h" -or -name "*.m" \) -print0 | \<br>
+              　xargs -0 egrep --with-filename --line-number \<br>
+              　--only-matching "($KEYWORDS).*\$" | \<br>
+              　perl -p -e "s/($KEYWORDS)/ warning: \$1/"<br>
+            </p>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h3>archiveビルドした時にできる.xcarchive等のパスを簡単に知る方法</h3>
+            <p>
+              xcarchiveのパスは以下のように日時などで変化するのでJenkinsからビルドしたアプリをどこかにアップロードするといったことがやりづらいという問題がある。
+              /Users/username/Library/Developer/Xcode/Archives/2014-08-09/menuFX 2014-08-09 4.04.xcarchive
+            </p>
+          </section>
+          <section>
+            <p>やり方</p>
+            <ul>
+              <li>
+                archiveビルドのpost-actionで以下の環境変数が使える。<br>
+                ARCHIVE_PATH<br>
+                ARCHIVE_PRODUCTS_PATH<br>
+                ARCHIVE_DSYMS_PATH<br>
+              </li>
+            </ul>
+          </section>
+          <section>
+            <ul>
+              <li>
+                archiveビルドのpost-actionで以下のスクリプトを実行し、環境変数を書き出す。
+                <p style="text-align: left;font-size: 20px">
+                  BUILD_DIR=$PROJECT_DIR/build<br>
+                  mkdir -p $BUILD_DIR<br>
+                  echo "ARCHIVE_PATH=\"$ARCHIVE_PATH\"" > $BUILD_DIR/archive_paths.sh<br>
+                  echo "ARCHIVE_PRODUCTS_PATH=\"$ARCHIVE_PRODUCTS_PATH\"" >> $BUILD_DIR/archive_paths.sh<br>
+                  echo "ARCHIVE_DSYMS_PATH=\"$ARCHIVE_DSYMS_PATH\"" >> $BUILD_DIR/archive_paths.sh<br>
+                  echo "INFOPLIST_PATH=\"$INFOPLIST_PATH\"" >> $BUILD_DIR/archive_paths.sh<br>
+                </p>
+              </li>
+              <li>
+                ビルド後に実行するシェルスクリプトで以下を実行すると$ARCHIVE_PATHなどが使えるようになる。<br>
+                source build/archive_paths.sh
+              </li>
+            </ul>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h3>Icon Versioning</h3>
+            <p>アプリのアイコンに任意の文字列を重ねることができる。ビルド日時、コミットのハッシュ値、ブランチ名を表示するとよい。これで間違ったバージョンのアプリを使ってテストしてしまっていた・・・ということが防げる。</p>
+            <img src="http://www.merowing.info/uploads/2013/03/Icon.png" style="height: 200px">
+          </section>
+          <section>
+            <p>やり方</p>
+            <ul>
+              <li>ImageMagick installer for Mac OS XからimagemagickとGhostScriptをダウンロード・インストールする</li>
+              <li><a href="https://github.com/krzysztofzablocki/IconOverlaying">このプロジェクト</a>のScripts/iconVersioning.shを自分のプロジェクトにコピーし、Run Scriptで実行する。</li>
+              <li>iconVersioning.shの以下の部分を修正する
+                <p style="text-align: left;font-size: smaller">
+                  convert /tmp/temp.png /tmp/labels-base.png -geometry +0+$band_position -composite /tmp/labels.png -geometry +0+$text_position -geometry +${w}-${h} -composite "$target_path"<br>
+                  の「-geometry +${w}-${h}」を削除。
+                </p>
+              </li>
+              <li>シェルスクリプトから取得出来る文字列ならなんでもアイコンに表示出来るので、必要に応じてiconVersioning.shを修正する</li>
+            </ul>
+          </section>
+        </section>
+      </div>
+    </div>
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/highlight.js', async: true, callback: function() { window.hljs.initHighlightingOnLoad(); } },
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'lib/js/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'lib/js/data-markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+		</script>
+
+	</body>
+</html>
