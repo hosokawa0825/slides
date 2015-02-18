@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Android Studioの便利機能等</title>
+    <meta name="author" content="toru hosokawa">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/default.css" id="theme">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+        document.write('<link rel="stylesheet" href="css/print/' + ( window.location.search.match(/print-pdf/gi) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">');
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="reveal">
+
+    <!-- Any section element inside of this container is displayed as a slide -->
+    <div class="slides">
+        <section>
+            <h3>Android Studioの便利機能等</h3>
+            <b>Toru Hosokawa</b><br>
+            twitter:<a href="https://twitter.com/anton0825">@anton0825</a><br>
+            facebook:<a href="http://www.facebook.com/toru.hosokawa1">toru.hosokawa1</a><br>
+            github:<a href="https://github.com/hosokawa0825">hosokawa0825</a><br>
+            blog:<a href="http://d.hatena.ne.jp/anton0825/">http://d.hatena.ne.jp/anton0825/</a><br>
+            <h4>2015.2.18</h4>
+        </section>
+
+        <section>
+            <section>
+                <h3>呼ばれたメソッドをログに出す</h3>
+
+                <p>手書きは面倒。。</p>
+                <pre><code>
+                    @Override
+                    protected void onCreate(final Bundle savedInstanceState) {
+                        super.onCreate(savedInstanceState);
+                        Log.d("HomeActivity", "onCreate");
+                    }
+                </code></pre>
+            </section>
+            <section>
+                <p>メソッド化</p>
+                <pre><code>
+                    public class MyUtils {
+                        public static void log(Object obj) {
+                            Log.d(obj.getClass().getSimpleName(), "(" + obj.hashCode() + "):" + Thread.currentThread().getStackTrace()[3].getMethodName());
+                        }
+                    }
+                </code></pre>
+                <p>呼び出し側</p>
+                <pre><code>
+                    @Override
+                    protected void onCreate(final Bundle savedInstanceState) {
+                        super.onCreate(savedInstanceState);
+                        MyUtils.log(this);
+                    }
+                </code></pre>
+                <p>吐かれたログ</p>
+                <pre><code>
+                    D/Tab1Fragment﹕ (549828625):onViewCreated
+                </code></pre>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h3>使って良かったライブラリ</h3>
+                <a href="https://github.com/frankiesardo/icepick">Icepick</a>
+                <p>InstanceStateのsaveとrestoreを簡単にできる</p>
+                <pre><code>
+                    class ExampleActivity extends Activity {
+                        @Icicle String username; // save/restoreされる
+
+                        @Override public void onCreate(Bundle savedInstanceState) {
+                            super.onCreate(savedInstanceState);
+                            Icepick.restoreInstanceState(this, savedInstanceState);
+                        }
+
+                        @Override public void onSaveInstanceState(Bundle outState) {
+                            super.onSaveInstanceState(outState);
+                            Icepick.saveInstanceState(this, outState);
+                        }
+                    }
+                </code></pre>
+            </section>
+            <section>
+                <a href="http://joel-costigliola.github.io/assertj/">AssertJ</a>
+                <p>Assertionライブラリ。fest-androidの後継プロジェクト</p>
+                <pre><code>
+                    assertThat(frodo.getName()).isEqualTo("Frodo");
+                </code></pre>
+                <a href="https://github.com/skyscreamer/JSONassert">JSONassert</a>
+                <p>JSONに特化したAssertionライブラリ</p>
+                <pre><code>
+                    JSONObject data = getRESTData("/friends/367.json");
+                    String expected = "{friends:[{id:123,name:\"Corby Page\"},{id:456,name:\"Carter Page\"}]}";
+                    JSONAssert.assertEquals(expected, data, false);
+                </code></pre>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h3>Android Studio Tips</h3>
+                <p>コマンドの検索</p>
+                <img src="http://www.developerphil.com/assets/08-findaction.gif"><br/>
+                <ul>
+                    <li>Mac: Cmd+Shift+a</li>
+                    <li>windows: Ctrl+Shift+a</li>
+                </ul>
+            </section>
+            <section>
+                <p>コード補完決定時のTabとEnterの挙動の違い。<br/>Enterだと補完文字が挿入されるだけだが、Tabだと前方にある文字列を置換する。</p>
+                <img src="http://www.developerphil.com/assets/45-codecompletionentertab.gif">
+            </section>
+            <section>
+                <p>パラメータの情報を表示する。</p>
+                <img src="http://www.developerphil.com/assets/44-parameterinfo.gif"><br/>
+                <ul>
+                    <li>Mac: Cmd+P</li>
+                    <li>windows: Ctrl+P</li>
+                </ul>
+            </section>
+            <section>
+                <p>ActiveなPanel/Tabを切り替える</p>
+                <img src="http://www.developerphil.com/assets/46-switcher.gif"><br/>
+                <ul>
+                    <li>Mac/windows: Ctrl+Tab</li>
+                </ul>
+            </section>
+            <section>
+                <p>データがどこから来たものか、どこに渡されるのかを表示する。ただし、静的解析なので参考程度に。</p>
+                <img src="http://www.developerphil.com/assets/31-analyzedataflow.gif"><br/>
+                <ul>
+                    <li>メニューのAnalyze → Analyze Data Flow to/from Here</li>
+                </ul>
+            </section>
+            <section>
+                <p>ファイルをブランチ間で比較する</p>
+                <img src="http://www.developerphil.com/assets/38-comparewithbranch.gif"><br/>
+                <ul>
+                    <li>メニューのVCS -> Git -> Compare With Branch</li>
+                </ul>
+            </section>
+            <section>
+                <p>Break Pointにヒットした時にログを出す</p>
+                <img src="http://www.developerphil.com/assets/23-loggingbreakpoints.gif"><br/>
+                <ul>
+                    <li>Break Pointを右クリック -> Suspendのチェックを外す -> Log evaluated Expressionに式を書く</li>
+                </ul>
+            </section>
+            <section>
+                <p>Break PointをDisableにする</p>
+                <img src="http://www.developerphil.com/assets/25-disablebreakpoint.gif"><br/>
+                <ul>
+                    <li>Break PointをAlt+左クリック</li>
+                </ul>
+            </section>
+            <section>
+                <p>変数の中身を表示する</p>
+                <img src="http://www.developerphil.com/assets/28-mouse_evaluate_expression.gif"><br/>
+                <ul>
+                    <li>デバッグ実行中に変数をAlt+左クリック</li>
+                </ul>
+            </section>
+            <section>
+                <p>オブジェクトにラベルを付ける</p>
+                <img src="http://www.developerphil.com/assets/29-markobject.gif"><br/>
+                <ul>
+                    <li>変数を右クリックし、Mark Objectをクリック</li>
+                </ul>
+            </section>
+            <section>
+                <p>選択範囲の拡大縮小</p>
+                <img src="http://www.developerphil.com/assets/14-recents.gif"><br/>
+                <ul>
+                    <li>Mac: Alt+Up/Down</li>
+                    <li>windows: Ctrl+w/Ctrl+Shift+w</li>
+                </ul>
+            </section>
+            <section>
+                <p>ファイル履歴。incrementalに絞り込み可能。</p>
+                <img src="http://www.developerphil.com/assets/12-expand_shrink_selection.gif"><br/>
+                <ul>
+                    <li>Mac: Cmd+e</li>
+                    <li>windows: Ctrl+e</li>
+                </ul>
+            </section>
+            <section>
+                <p>メソッドの順序を入れ替える</p>
+                <img src="http://www.developerphil.com/assets/15-movemethods.gif"><br/>
+                <ul>
+                    <li>Mac: Cmd+Alt+Up/Down</li>
+                    <li>windows: Ctrl+Shift+Up/Down</li>
+                </ul>
+            </section>
+            <section>
+                <p>最後に編集した箇所に戻る</p>
+                <img src="http://www.developerphil.com/assets/15-movemethods.gif"><br/>
+                <ul>
+                    <li>Mac: Cmd+Alt+Up/Down</li>
+                    <li>windows: Ctrl+Shift+Up/Down</li>
+                </ul>
+            </section>
+            <section>
+                <p>行をまとめる</p>
+                <img src="http://www.developerphil.com/assets/18-joinlines.gif"><br/>
+                <ul>
+                    <li>Mac: Ctrl+Shift+j</li>
+                    <li>windows: Ctrl+Shift+j</li>
+                </ul>
+            </section>
+            <section>
+                <p>Editorで表示しているファイルをFinderで開く。直接のショートカットは無いのでSelect inから行う。</p>
+                <img src="http://www.developerphil.com/assets/19-select-in.gif"><br/>
+                <ul>
+                    <li>Mac: Alt+F1の後、「R」を入力し、Enter</li>
+                    <li>windows: Alt+F1の後、「R」を入力し、Enter</li>
+                </ul>
+            </section>
+            <section>
+                <p>メソッド・インナークラスを移動する</p>
+                <img src="http://www.developerphil.com/assets/02-move_between_methods.gif"><br/>
+                <ul>
+                    <li>Mac: Ctrl+Up/Down</li>
+                    <li>windows: Alt+Up/Down</li>
+                </ul>
+            </section>
+            <section>
+                <p>Editorの中にあるメソッドやクラスを検索する</p>
+                <img src="http://www.developerphil.com/assets/03-filestructure.gif"><br/>
+                <ul>
+                    <li>Mac: Cmd+F12</li>
+                    <li>windows: Ctrl+F12</li>
+                </ul>
+            </section>
+            <section>
+                <p>メソッドの呼び出し階層を表示する</p>
+                <img src="http://www.developerphil.com/assets/04-callinghierarchy.gif"><br/>
+                <ul>
+                    <li>Mac: Ctrl+Alt+h</li>
+                    <li>windows: Ctrl+Alt+h</li>
+                </ul>
+            </section>
+        </section>
+    </div>
+</div>
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.min.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+<script>
+
+    // Full list of configuration options available here:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            { src: 'lib/js/highlight.js', async: true, callback: function () {
+                window.hljs.initHighlightingOnLoad();
+            } },
+            { src: 'lib/js/classList.js', condition: function () {
+                return !document.body.classList;
+            } },
+            { src: 'lib/js/showdown.js', condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            } },
+            { src: 'lib/js/data-markdown.js', condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            } },
+            { src: 'plugin/zoom-js/zoom.js', async: true, condition: function () {
+                return !!document.body.classList;
+            } },
+            { src: 'plugin/notes/notes.js', async: true, condition: function () {
+                return !!document.body.classList;
+            } }
+        ]
+    });
+</script>
+
+</body>
+</html>
