@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Robolectricのハマりポイント</title>
+    <meta name="author" content="toru hosokawa">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/default.css" id="theme">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+        document.write('<link rel="stylesheet" href="css/print/' + ( window.location.search.match(/print-pdf/gi) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">');
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="reveal">
+
+    <!-- Any section element inside of this container is displayed as a slide -->
+    <div class="slides">
+        <section>
+            <h3>Robolectricのハマりポイント</h3>
+            <b>Toru Hosokawa</b><br>
+            twitter:<a href="https://twitter.com/anton0825">@anton0825</a><br>
+            facebook:<a href="http://www.facebook.com/toru.hosokawa1">toru.hosokawa1</a><br>
+            github:<a href="https://github.com/hosokawa0825">hosokawa0825</a><br>
+            blog:<a href="http://d.hatena.ne.jp/anton0825/">http://d.hatena.ne.jp/anton0825/</a><br>
+            <h4>2015.2.28</h4>
+        </section>
+
+        <section>
+            <section>
+                <h3>Robolectric</h3>
+                <p>みんな大好き単体テストライブラリ。<br/>
+                JVM上でテストを素早く実行できて便利！だけど、落とし穴も色々ある・・・<br/>
+                テストを書いていてハマったポイントを紹介します。
+                </p>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h3>ドキュメントが薄い</h3>
+                <p>
+                    <a href="http://robolectric.org/">公式ドキュメント</a>にはかなり基本的なことしか書いてない。<br/>
+                    <a href="https://github.com/robolectric/robolectric-samples">サンプルプロジェクト</a>にサンプルコードがほとんどない
+                </p>
+            </section>
+            <section>
+                <p>
+                    最も頼りになるドキュメントは、<a href="https://github.com/robolectric/robolectric/blob/master/robolectric/src/test">本家プロジェクトのテストコード</a><br/>
+                    例：<a href="https://github.com/robolectric/robolectric/blob/master/robolectric/src/test/java/org/robolectric/RobolectricTestRunnerTest.java">RobolectricTestRunnerのテストコード</a><br/>
+                    後はRobolectric本体のコードを読んで理解する。
+                </p>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h3>assetsフォルダ・resourcesフォルダを複数設定する</h3>
+                <p>動機はサーバからのレスポンスなどのテストデータを別ファイルにして/src/test/assetsに置くため。<br/>
+                    一方で/src/main/assetsも読み込める状態を維持したい。</p>
+                <br/>
+                <p>対応方法</p>
+                <ul>
+                    <li>RobolectricTestRunnerのサブクラスを作り、ResourceLoaderをカスタマイズする<br>
+                        <a href="https://gist.github.com/hosokawa0825/97f507c6fa688657c446#file-mytestrunner-java">サンプルコード</a></li>
+                    <li>テストクラスの@RunWithでMyTestRunnerを指定する</li>
+                </ul>
+            </section>
+            <section>
+                <p>問題点</p>
+                <ul>
+                    <li>こんなdirty hackな方法はつらい・・・</li>
+                    <li>Robolectricの内部実装に依存しているのでRobolectricがバージョンアップしたら動かなくなる可能性高い。</li>
+                </ul>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h3>戻り値をテストデータで置き換えるのが難しい場合がある</h3>
+                <p>
+                    例：Build.VERSION.RELEASE(OSのバージョン番号)の値を書き換えたい。<br/>
+                    が、宣言時に初期化されている。かつstatic finalなので書き換えられない。
+                </p>
+                <pre><code>
+                    public static final String RELEASE = getString("ro.build.version.release");
+
+                    private static String getString(String property) {
+                        return SystemProperties.get(property, UNKNOWN);
+                    }
+                </code></pre>
+            </section>
+            <section>
+                解決策：カスタムTestLifecycleを定義してBuild.VERSION.RELEASEが初期化される前にShadowSystemPropertiesを書き換えた。
+                <a href="https://gist.github.com/hosokawa0825/97f507c6fa688657c446#file-mytestrunner-java">サンプルコード</a></li>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h3>Fragmentのテストがつらい</h3>
+                <p>そもそもMVCのControllerは色んなクラスに依存していることが多いのでテストはやりづらい。<br/>
+                    Fragmentのテストコード例：</p>
+                <pre><code>
+                    // 事前処理
+                    OrderListFragment target = OrderListFragment_.builder().build();
+                    Robolectric.addPendingHttpResponse(200, TestUtils.getStringFromAssets(TestDataType.HTTP, "orderList.response.json"));
+
+                    // 処理実行
+                    startFragment(target, MockMyActivity.class);
+                    Robolectric.runBackgroundTasks();
+                    Robolectric.runUiThreadTasks();
+
+                    // 検証
+                    List&lt;Order&gt; orders = (List&lt;Order&gt;) Whitebox.getInternalState(target, "orders");
+                    assertThat(orders.size()).isEqualTo(6);
+                </code></pre>
+            </section>
+            <section>
+                <p>FragmentからActivityへのcallbackをインターフェース経由でやっていればActivityのMockは作りやすい。<br/>
+                ActivityのMockの例：</p>
+                <pre><code>
+                    public class MockMyActivity extends FragmentActivity implements IErrorHandler {
+                        @Override
+                        public void onError(final Exception e) {
+                            Log.d("MockMyActivity", "onError", e);
+                        }
+                    }
+                </code></pre>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h3>Android StudioのUnit Test Support</h3>
+                <a href="http://tools.android.com/tech-docs/unit-testing-support">公式サイト</a><br/>
+                <p>
+                    Robolectricと同じアプローチに見える。（JVMで実行、Android SDKのクラスはMockに置き換え）<br/>
+                    Shadowがまだないので現状使えない。が、いずれRobolectricを置き換えるようになり、テストコードの書き直しが必要になるかも。。<br/>
+                    一旦様子見で。
+                </p>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h3>まとめ</h3>
+                <ul>
+                    <li>ちょっと高度なことをやろうとするとすぐハマる</li>
+                    <li>でも単純なテストは非常に快適に書ける</li>
+                    <li>使いどころを見極めて費用対効果の高いテストコードを書きましょう</li>
+                </ul>
+            </section>
+        </section>
+    </div>
+</div>
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.min.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+<script>
+
+    // Full list of configuration options available here:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            { src: 'lib/js/highlight.js', async: true, callback: function () {
+                window.hljs.initHighlightingOnLoad();
+            } },
+            { src: 'lib/js/classList.js', condition: function () {
+                return !document.body.classList;
+            } },
+            { src: 'lib/js/showdown.js', condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            } },
+            { src: 'lib/js/data-markdown.js', condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            } },
+            { src: 'plugin/zoom-js/zoom.js', async: true, condition: function () {
+                return !!document.body.classList;
+            } },
+            { src: 'plugin/notes/notes.js', async: true, condition: function () {
+                return !!document.body.classList;
+            } }
+        ]
+    });
+</script>
+
+</body>
+</html>
