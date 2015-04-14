@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Custom View Tips</title>
+    <meta name="author" content="toru hosokawa">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/default.css" id="theme">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+        document.write('<link rel="stylesheet" href="css/print/' + ( window.location.search.match(/print-pdf/gi) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">');
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="reveal">
+
+    <!-- Any section element inside of this container is displayed as a slide -->
+    <div class="slides">
+        <section>
+            <h3>Custom View Tips</h3>
+            <b>Toru Hosokawa</b><br>
+            twitter:<a href="https://twitter.com/anton0825">@anton0825</a><br>
+            facebook:<a href="http://www.facebook.com/toru.hosokawa1">toru.hosokawa1</a><br>
+            github:<a href="https://github.com/hosokawa0825">hosokawa0825</a><br>
+            blog:<a href="http://d.hatena.ne.jp/anton0825/">http://d.hatena.ne.jp/anton0825/</a><br>
+            <h4>2015.4.15</h4>
+        </section>
+
+        <section>
+            <section>
+                <h3>一つのlayout xmlを複数回includeしている時に内部のViewにアクセスする方法</h3>
+                <p>子layout xml</p>
+                <pre><code>
+                    &lt;TextView android:id=&quot;@+id/text_view&quot;
+                    android:layout_width=&quot;wrap_content&quot;
+                    android:layout_height=&quot;wrap_content&quot; /&gt;
+                </code></pre>
+
+                <p>親layout xml</p>
+                <pre><code>
+                    &lt;include layout=&quot;@layout/view_contact_name&quot; android:id=&quot;+id/test1&quot;/&gt;
+                    &lt;include layout=&quot;@layout/view_contact_name&quot; android:id=&quot;+id/test2&quot;/&gt;
+                </code></pre>
+            </section>
+            <section>
+                <p>findViewByIdを複数回実行してViewを取得する</p>
+                <pre><code>
+                    @Override
+                    public void onViewCreated(View view, Bundle savedInstanceState) {
+                        super.onViewCreated(view, savedInstanceState);
+                        TextView tv1 = view.findViewById(R.id.test1).findViewById(R.id.text_view);
+                        TextView tv2 = view.findViewById(R.id.test2).findViewById(R.id.text_view);
+                    }
+                </code></pre>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h3>Custom ViewのonSave/RestoreInstanceStateを簡潔に実装する</h3>
+                <p>BaseSavedStateを継承したSavedStateクラスを定義する方法が一般的だが、コード量が増えてしまう。</p>
+                <a href="http://stackoverflow.com/a/3542895/1421958">コード例</a>
+            </section>
+            <section>
+                <p>Bundleを使えば簡潔に書ける</p>
+                <a href="http://stackoverflow.com/a/8127813/1421958">コード例</a>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h3>Custom Viewを複数並べる際の注意点</h3>
+                <p>Custom Viewを複数並べると、onRestoreInstanceStateが実行された際に同じ状態になってしまうことがある</p>
+                <p>以下の例は「注文価格」の行がCustom Viewになっている</p>
+                <p>実行前　　　　実行後</p>
+                <img src="images/before.png" width="350px"><img src="images/after.png" width="350px">
+            </section>
+            <section>
+                <p>なぜそうなるか？</p>
+                <p>ViewGroup</p>
+                <pre><code>
+                    @Override
+                    protected void dispatchRestoreInstanceState(SparseArray<Parcelable> container) {
+                        super.dispatchRestoreInstanceState(container);
+                        final int count = mChildrenCount;
+                        final View[] children = mChildren;
+                        for (int i = 0; i < count; i++) {
+                            View c = children[i];
+                            if ((c.mViewFlags & PARENT_SAVE_DISABLED_MASK) != PARENT_SAVE_DISABLED) {
+                                c.dispatchRestoreInstanceState(container);
+                            }
+                        }
+                    }
+                </code></pre>
+                <p>Viewの状態を保存するcontainerはFragment/Activity毎に一つ</p>
+            </section>
+            <section>
+                <p>View</p>
+                <pre><code>
+                    protected void dispatchRestoreInstanceState(SparseArray<Parcelable> container) {
+                        if (mID != NO_ID) {
+                            Parcelable state = container.get(mID);
+                            if (state != null) {
+                                // Log.i("View", "Restoreing #" + Integer.toHexString(mID)
+                                // + ": " + state);
+                                mPrivateFlags &= ~PFLAG_SAVE_STATE_CALLED;
+                                onRestoreInstanceState(state);
+                                if ((mPrivateFlags & PFLAG_SAVE_STATE_CALLED) == 0) {
+                                    throw new IllegalStateException(
+                                        "Derived class did not call super.onRestoreInstanceState()");
+                                }
+                            }
+                        }
+                    }
+                </code></pre>
+                <p>ViewのIDをkeyとしてstateをcontainerから取得するため、IDが同じViewには同じstateが渡される</p>
+            </section>
+            <section>
+                <p>解決策</p>
+                <p>android:id属性を削除する。android:tagを付ける。findViewWithTagを使用する</p>
+                <pre><code>
+                    @Override
+                    public void onFinishInflate() {
+                        inflate(getContext(), R.layout.parent_view, this);
+                        childView = ((NumberPicker) this.findViewWithTag("child_view"));
+                    }
+                </code></pre>
+            </section>
+        </section>
+    </div>
+</div>
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.min.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+<script>
+
+    // Full list of configuration options available here:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            { src: 'lib/js/highlight.js', async: true, callback: function () {
+                window.hljs.initHighlightingOnLoad();
+            } },
+            { src: 'lib/js/classList.js', condition: function () {
+                return !document.body.classList;
+            } },
+            { src: 'lib/js/showdown.js', condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            } },
+            { src: 'lib/js/data-markdown.js', condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            } },
+            { src: 'plugin/zoom-js/zoom.js', async: true, condition: function () {
+                return !!document.body.classList;
+            } },
+            { src: 'plugin/notes/notes.js', async: true, condition: function () {
+                return !!document.body.classList;
+            } }
+        ]
+    });
+</script>
+
+</body>
+</html>
